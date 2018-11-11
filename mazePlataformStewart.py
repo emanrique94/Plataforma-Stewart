@@ -63,23 +63,123 @@ def posicionInicial():
     pulso0normalchanel4 = int(PulsoMedio4 / (1000000/60) * 4095)
     
     #Motion
+    #pareja 1 y 2
     pwm.set_pwm(1, 0, pulso0normalchanel1)
     time.sleep(0.5)
     pwm.set_pwm(2, 0, pulso0normalchanel2)
     time.sleep(0.5)
+    #pareja 4 y 3
     pwm.set_pwm(4, 0, pulso0normalchanel4)
     time.sleep(0.5)
     pwm.set_pwm(3, 0, pulso0normalchanel3)
     time.sleep(0.5)
+    #pareja 5 y 0
     pwm.set_pwm(5, 0, pulso0normalchanel5)
     time.sleep(0.5)
     pwm.set_pwm(0, 0, pulso0normalchanel0)
     time.sleep(0.5)
+    
+def posicionAlta12():
+    
+    #parejas 0 y 5
+    pulso0normalchanel0 = int(PulsoBajo0 / (1000000/60) * 4095)
+    pulso0normalchanel5 = int(PulsoBajo5 / (1000000/60) * 4095)
+    
+    # parejas  1 y 2
+    pulso0normalchanel1 = int(PulsoAlto1 / (1000000/60) * 4095)
+    pulso0normalchanel2 = int(PulsoAlto2 / (1000000/60) * 4095)
+    
+    # parejas 3 y 4
+    pulso0normalchanel3 = int(PulsoBajo3 / (1000000/60) * 4095)
+    pulso0normalchanel4 = int(PulsoBajo4 / (1000000/60) * 4095)
+    
+       #Motion
+    #pareja 1 y 2
+    pwm.set_pwm(2, 0, pulso0normalchanel2)
+    time.sleep(0.5)
+    pwm.set_pwm(1, 0, pulso0normalchanel1)
+    time.sleep(0.5)
+    #pareja 4 y 3
+    pwm.set_pwm(4, 0, pulso0normalchanel4)
+    time.sleep(0.5)
+    pwm.set_pwm(3, 0, pulso0normalchanel3)
+    time.sleep(0.5)
+    #pareja 5 y 0
+    pwm.set_pwm(0, 0, pulso0normalchanel0)
+    time.sleep(0.5)
+    pwm.set_pwm(5, 0, pulso0normalchanel5)
+    time.sleep(0.5)
+    
+def posicionAlta34():
+    #parejas 0 y 5
+    pulso0normalchanel0 = int(PulsoBajo0 / (1000000/60) * 4095)
+    pulso0normalchanel5 = int(PulsoBajo5 / (1000000/60) * 4095)
+    
+    # parejas  1 y 2
+    pulso0normalchanel1 = int(PulsoBajo1 / (1000000/60) * 4095)
+    pulso0normalchanel2 = int(PulsoBajo2 / (1000000/60) * 4095)
+    
+    # parejas 3 y 4
+    pulso0normalchanel3 = int(PulsoAlto3 / (1000000/60) * 4095)
+    pulso0normalchanel4 = int(PulsoAlto4 / (1000000/60) * 4095)
+    
+    #Motion
+    #pareja 4 y 3
+    pwm.set_pwm(4, 0, pulso0normalchanel4)
+    time.sleep(0.5)
+    pwm.set_pwm(3, 0, pulso0normalchanel3)
+    time.sleep(0.5)
+    #pareja 5 y 0
+    pwm.set_pwm(0, 0, pulso0normalchanel0)
+    time.sleep(0.5)
+    pwm.set_pwm(5, 0, pulso0normalchanel5)
+    time.sleep(0.5)
+    #pareja 1 y 2
+    pwm.set_pwm(2, 0, pulso0normalchanel2)
+    time.sleep(0.5)
+    pwm.set_pwm(1, 0, pulso0normalchanel1)
+    time.sleep(0.5)
 
+def posicionAlta05():
+    #parejas 0 y 5
+    pulso0normalchanel0 = int(PulsoAlto0 / (1000000/60) * 4095)
+    pulso0normalchanel5 = int(PulsoAlto5 / (1000000/60) * 4095)
+    
+    # parejas  1 y 2
+    pulso0normalchanel1 = int(PulsoMedio1 / (1000000/60) * 4095)
+    pulso0normalchanel2 = int(PulsoMedio2 / (1000000/60) * 4095)
+    
+    # parejas 3 y 4
+    pulso0normalchanel3 = int(PulsoBajo3 / (1000000/60) * 4095)
+    pulso0normalchanel4 = int(PulsoBajo4 / (1000000/60) * 4095)
+    
+    #Motion
+    #pareja 5 y 0
+    pwm.set_pwm(0, 0, pulso0normalchanel0)
+    time.sleep(0.5)
+    pwm.set_pwm(5, 0, pulso0normalchanel5)
+    time.sleep(0.5)
+    #pareja 1 y 2
+    pwm.set_pwm(2, 0, pulso0normalchanel2)
+    time.sleep(0.5)
+    pwm.set_pwm(1, 0, pulso0normalchanel1)
+    time.sleep(0.5)
+    #pareja 4 y 3
+    pwm.set_pwm(4, 0, pulso0normalchanel4)
+    time.sleep(0.5)
+    pwm.set_pwm(3, 0, pulso0normalchanel3)
+    time.sleep(0.5)
 
 while(1):
     #iniciar motores
     posicionInicial()
+    time.sleep(2)
+    posicionAlta12()
+    time.sleep(2)
+    posicionAlta34()
+    time.sleep(2)
+    posicionAlta05()
+    time.sleep(2)
     # filas y colunmas 16 
     f= int(8)
     c = int(16)
