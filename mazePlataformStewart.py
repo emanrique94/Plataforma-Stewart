@@ -1,8 +1,12 @@
+from __future__ import division
 import cv2
 import numpy as np
 import time
 import numpy
-
+# Import the PCA9685 module.
+import Adafruit_PCA9685
+#board object
+pwm = Adafruit_PCA9685.PCA9685()
 # Inicializar camara y parametros de tamaño
 cap = cv2.VideoCapture(0)
 width = 320
@@ -12,7 +16,70 @@ cap.set(4, heidth)
 # linea color para marcar cuadrantes camara 
 line = 150
 
+#Pareja 0 y 5
+
+PulsoAlto5 = 1200
+PulsoMedio5 = 1500
+PulsoBajo5 = 1800
+
+PulsoAlto0 = 1800
+PulsoMedio0 = 1500
+PulsoBajo0 = 1200
+
+#Pareja 1 y 2
+
+PulsoAlto1= 1200
+PulsoMedio1 = 1500
+PulsoBajo1 = 1800
+
+PulsoAlto2 = 1800
+PulsoMedio2 = 1500
+PulsoBajo2 = 1200
+
+#Pareja 3 y 4 
+
+PulsoAlto4 = 1800
+PulsoMedio4 = 1500
+PulsoBajo4 = 1200
+
+PulsoAlto3 = 1200
+PulsoMedio3 = 1500
+PulsoBajo3 = 1800
+#cuenta
+count = 0
+
+
+def posicionInicial():
+    #parejas 0 y 5
+    pulso0normalchanel0 = int(PulsoMedio0 / (1000000/60) * 4095)
+    pulso0normalchanel5 = int(PulsoMedio5 / (1000000/60) * 4095)
+    
+    # parejas  1 y 2
+    pulso0normalchanel1 = int(PulsoMedio1 / (1000000/60) * 4095)
+    pulso0normalchanel2 = int(PulsoMedio2 / (1000000/60) * 4095)
+    
+    # parejas 3 y 4
+    pulso0normalchanel3 = int(PulsoMedio3 / (1000000/60) * 4095)
+    pulso0normalchanel4 = int(PulsoMedio4 / (1000000/60) * 4095)
+    
+    #Motion
+    pwm.set_pwm(1, 0, pulso0normalchanel1)
+    time.sleep(0.5)
+    pwm.set_pwm(2, 0, pulso0normalchanel2)
+    time.sleep(0.5)
+    pwm.set_pwm(4, 0, pulso0normalchanel4)
+    time.sleep(0.5)
+    pwm.set_pwm(3, 0, pulso0normalchanel3)
+    time.sleep(0.5)
+    pwm.set_pwm(5, 0, pulso0normalchanel5)
+    time.sleep(0.5)
+    pwm.set_pwm(0, 0, pulso0normalchanel0)
+    time.sleep(0.5)
+
+
 while(1):
+    #iniciar motores
+    posicionInicial()
     # filas y colunmas 16 
     f= int(8)
     c = int(16)
@@ -24,7 +91,7 @@ while(1):
     colCuadrantes = int(width/16)
     rowCuadrantes = int(heidth/8)
     # tomar un fragmento
-    _,frameRed = cap.read() 
+    _,frame = cap.read() 
     #Cambiar de escala a hsv
     img_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     # mascara baja de (0-10)
@@ -50,7 +117,7 @@ while(1):
         for col in range(0, width): #width-1): 120
             j = int(col/colCuadrantes)
             i = int(row/rowCuadrantes)
-            Cuadrantes[int(i)][int(j)] += res[row, col, 2]
+            Cuadrantes[int(i)][int(j)] += mask[row, col]
     # identeficar posicion actual        
     max = -1
     maxi = 0
@@ -63,14 +130,14 @@ while(1):
                 maxj = colCuadrantes         
     print(maxi)
     print(maxj)
-    # mostrar resultados
+    # Mostrar resultados
     #output_hsv =  cv2.imshow("hsv", output_hsv)
     #mask = cv2.imshow("mask", mask)    
-    frame  =  cv2.imshow("Camara", frame)
+    #frame  =  cv2.imshow("Camara", frame)
     res = cv2.imshow("res", res)
     # cerrar con esc
     k = cv2.waitKey(5) & 0xFF
     if k == 27:
         break
 cv2.destroyAllWindows()
-cap.release()  
+cap.release()
