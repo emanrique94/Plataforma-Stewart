@@ -4,9 +4,15 @@
 # License: Public Domain
 from __future__ import division
 import time
+import cv2
+import numpy as np
+import  matplotlib
+from PIL import Image
 
 # Import the PCA9685 module.
 import Adafruit_PCA9685
+# inicializar camara 
+cap = cv2.VideoCapture(0)
 
 
 # Uncomment to enable debug output.
@@ -53,16 +59,10 @@ PulsoAlto3 = 1200
 PulsoMedio3 = 1500
 PulsoBajo3 = 1800
 
-# Helper function to make setting a servo pulse width simpler.
-def set_servo_pulse(channel, pulse):
-    pulse_length = 1000000    # 1,000,000 us per second 1M
-    pulse_length //= 60       # 60 Hz
-    print('{0}us per period'.format(pulse_length))
-    pulse_length //= 4096     # 12 bits of resolution
-    print('{0}us per bit'.format(pulse_length))
-    pulse *= 1000
-    pulse //= pulse_length
-    pwm.set_pwm(channel, 0, pulse)
+#cuenta
+count = 0
+
+
     
 def posicionInicial():
     #parejas 0 y 5
@@ -173,12 +173,34 @@ def posicionAlta34():
 # Set frequency to 60hz, good for servos.
 pwm.set_pwm_freq(60)
 
+def detect(image):
+    bitmap = cv2.fromarray(image)
+    
 print('Moving servo on channel 0, press Ctrl-C to quit...')
-while True:
-    #move servos
-    posicionInicial()
-    time.sleep(5)
-    posicionAlta12()
-
-
-   
+while(1):
+    # Take each frame
+    _,frameRed = cap.read()
+    # Convert BGR to HSV
+    hsv = cv2.cvtColor(frameRed, cv2.COLOR_BGR2HSV)
+    # define range of blue color in HSV
+    LowerRed = np.array([125, 125, 125])
+    UpperRed = np.array([180, 255, 255])
+    # Threshold the HSV image to get only blue colors
+    maskRed = cv2.inRange(hsv, LowerRed, UpperRed)
+    # Bitwise-AND mask and original image
+    resRed = cv2.bitwise_and(frameRed, frameRed, mask = maskRed)
+    #Show input
+    frameRed  =  cv2.imshow("red", frameRed)
+    #maskBlue = cv2.imshow('mask Blue',maskBlue)
+    resRed = cv2.imshow("Res", resRed)
+    #save photho
+    frame_width = int(cap.get(3))
+    frame_height = int(cap.get(4))
+    #cv2.imwrite("frame%d.jpg" % count, cap) 
+    #Exit camera with esc
+    k = cv2.waitKey(5) & 0xFF
+    if k == 27:
+        break
+    
+cv2.destroyAllWindows()
+cap.release() 
